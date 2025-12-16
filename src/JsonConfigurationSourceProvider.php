@@ -20,6 +20,23 @@ use Override;
  */
 class JsonConfigurationSourceProvider implements ServiceProviderInterface
 {
+    /**
+     * Directory to resolve configuration sources from.
+     *
+     * @var string
+     */
+    private readonly string $rootDirectory;
+
+    /**
+     * Create a new service provider instance.
+     *
+     * @param string $rootDirectory Directory to resolve configuration sources from.
+     */
+    public function __construct(string $rootDirectory = '')
+    {
+        $this->rootDirectory = $rootDirectory;
+    }
+
     #[Override]
     public function configure(ContainerBuilderInterface $containerBuilder): void
     {
@@ -27,7 +44,7 @@ class JsonConfigurationSourceProvider implements ServiceProviderInterface
         $configurationSourceProducers = $containerBuilder->build()
             ->get(ConfigurationSourceProducerRegistryInterface::class);
 
-        $configurationSourceProducers->register(new JsonConfigurationSourceProducer());
+        $configurationSourceProducers->register(new JsonConfigurationSourceProducer($this->rootDirectory));
     }
 
     /**

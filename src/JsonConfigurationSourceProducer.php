@@ -20,6 +20,23 @@ use Override;
  */
 class JsonConfigurationSourceProducer implements ConfigurationSourceProducerInterface
 {
+    /**
+     * Directory to resolve configuration sources from.
+     *
+     * @var string
+     */
+    private readonly string $rootDirectory;
+
+    /**
+     * Create a new configuration source producer instance.
+     *
+     * @param string $rootDirectory Directory to resolve configuration sources from.
+     */
+    public function __construct(string $rootDirectory)
+    {
+        $this->rootDirectory = strlen($rootDirectory) > 0 ? rtrim($rootDirectory, '/') . '/' : $rootDirectory;
+    }
+
     #[Override]
     public function canProduceConfigurationSourceFor(string $url): bool
     {
@@ -35,6 +52,6 @@ class JsonConfigurationSourceProducer implements ConfigurationSourceProducerInte
     #[Override]
     public function produceConfigurationSourceFor(string $url): ConfigurationSourceInterface
     {
-        return new JsonConfigurationSource((string) parse_url($url, PHP_URL_PATH));
+        return new JsonConfigurationSource($this->rootDirectory . parse_url($url, PHP_URL_PATH));
     }
 }

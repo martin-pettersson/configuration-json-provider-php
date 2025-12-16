@@ -24,7 +24,7 @@ class JsonConfigurationSourceProducerTest extends TestCase
     #[Before]
     public function setUp(): void
     {
-        $this->producer = new JsonConfigurationSourceProducer();
+        $this->producer = new JsonConfigurationSourceProducer(__DIR__);
     }
 
     #[Test]
@@ -40,7 +40,7 @@ class JsonConfigurationSourceProducerTest extends TestCase
     #[Test]
     public function shouldProduceConfigurationSourceWithRelativeFilePath(): void
     {
-        $configurationSource = $this->producer->produceConfigurationSourceFor('file:test/fixtures/configuration.json');
+        $configurationSource = $this->producer->produceConfigurationSourceFor('file:fixtures/configuration.json');
 
         $this->assertEquals(['key' => 'value'], $configurationSource->load());
     }
