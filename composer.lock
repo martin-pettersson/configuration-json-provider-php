@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0b79d4f59a67e393ff17883d5b9377b6",
+    "content-hash": "1bccf07e557118c494e09b836bcd6840",
     "packages": [
         {
             "name": "n7e/configuration",
@@ -205,6 +205,46 @@
                 "source": "https://github.com/martin-pettersson/dependency-injection-php/tree/0.2.1"
             },
             "time": "2025-02-17T12:22:11+00:00"
+        },
+        {
+            "name": "n7e/root-directory-aggregate",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/martin-pettersson/root-directory-aggregate-php.git",
+                "reference": "1337a03928ae46c5c7046ad3a81a10e28db8d28b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/martin-pettersson/root-directory-aggregate-php/zipball/1337a03928ae46c5c7046ad3a81a10e28db8d28b",
+                "reference": "1337a03928ae46c5c7046ad3a81a10e28db8d28b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "N7e\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Martin Pettersson",
+                    "email": "martin@n7e.se"
+                }
+            ],
+            "description": "A unified way of determining a projects root directory.",
+            "support": {
+                "issues": "https://github.com/martin-pettersson/root-directory-aggregate-php/issues",
+                "source": "https://github.com/martin-pettersson/root-directory-aggregate-php/tree/0.1.0"
+            },
+            "time": "2025-03-16T01:47:42+00:00"
         },
         {
             "name": "n7e/service-provider",

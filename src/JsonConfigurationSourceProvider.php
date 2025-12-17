@@ -21,39 +21,26 @@ use Override;
 class JsonConfigurationSourceProvider implements ServiceProviderInterface
 {
     /**
-     * Directory to resolve configuration sources from.
-     *
-     * @var string
-     */
-    private readonly string $rootDirectory;
-
-    /**
-     * Create a new service provider instance.
-     *
-     * @param string $rootDirectory Directory to resolve configuration sources from.
-     */
-    public function __construct(string $rootDirectory = '')
-    {
-        $this->rootDirectory = $rootDirectory;
-    }
-
-    #[Override]
-    public function configure(ContainerBuilderInterface $containerBuilder): void
-    {
-        /** @var \N7e\ConfigurationSourceProducerRegistryInterface $configurationSourceProducers */
-        $configurationSourceProducers = $containerBuilder->build()
-            ->get(ConfigurationSourceProducerRegistryInterface::class);
-
-        $configurationSourceProducers->register(new JsonConfigurationSourceProducer($this->rootDirectory));
-    }
-
-    /**
      * {@inheritDoc}
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter
      */
     #[Override]
+    public function configure(ContainerBuilderInterface $containerBuilder): void
+    {
+    }
+
+    #[Override]
     public function load(ContainerInterface $container): void
     {
+        /** @var \N7e\ConfigurationSourceProducerRegistryInterface $configurationSourceProducers */
+        $configurationSourceProducers = $container->get(ConfigurationSourceProducerRegistryInterface::class);
+
+        /** @var \N7e\RootDirectoryAggregateInterface $rootDirectoryAggregate */
+        $rootDirectoryAggregate = $container->get(RootDirectoryAggregateInterface::class);
+
+        $configurationSourceProducers->register(
+            new JsonConfigurationSourceProducer($rootDirectoryAggregate->getRootDirectory())
+        );
     }
 }

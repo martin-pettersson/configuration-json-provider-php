@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace N7e;
 
-use N7e\DependencyInjection\ContainerBuilderInterface;
+use JakubOnderka\PhpParallelLint\RunTimeException;
 use N7e\DependencyInjection\ContainerInterface;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -23,23 +23,24 @@ use PHPUnit\Framework\TestCase;
 class JsonConfigurationSourceProviderTest extends TestCase
 {
     private JsonConfigurationSourceProvider $provider;
-    private MockObject $containerBuilderMock;
     private MockObject $containerMock;
     private MockObject $registryMock;
+    private MockObject $rootDirectoryAggregateMock;
 
     #[Before]
     public function setUp(): void
     {
         $this->provider = new JsonConfigurationSourceProvider();
-        $this->containerBuilderMock = $this->getMockBuilder(ContainerBuilderInterface::class)->getMock();
         $this->containerMock = $this->getMockBuilder(ContainerInterface::class)->getMock();
         $this->registryMock = $this->getMockBuilder(ConfigurationSourceProducerRegistryInterface::class)->getMock();
+        $this->rootDirectoryAggregateMock = $this->getMockBuilder(RootDirectoryAggregateInterface::class)->getMock();
 
-        $this->containerBuilderMock->method('build')
-            ->willReturn($this->containerMock);
         $this->containerMock->method('get')
-            ->with(ConfigurationSourceProducerRegistryInterface::class)
-            ->willReturn($this->registryMock);
+            ->willReturnCallback(fn($identifier) => match ($identifier) {
+                ConfigurationSourceProducerRegistryInterface::class => $this->registryMock,
+                RootDirectoryAggregateInterface::class => $this->rootDirectoryAggregateMock,
+                default => throw new RunTimeException("No mock found for {$identifier}")
+            });
     }
 
     #[Test]
@@ -50,6 +51,6 @@ class JsonConfigurationSourceProviderTest extends TestCase
             ->method('register')
             ->with($this->isInstanceOf(JsonConfigurationSourceProducer::class));
 
-        $this->provider->configure($this->containerBuilderMock);
+        $this->provider->load($this->containerMock);
     }
 }
